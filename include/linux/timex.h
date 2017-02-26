@@ -143,6 +143,23 @@ extern void hardpps(const struct timespec *, const struct timespec *);
 int read_current_timer(unsigned long *timer_val);
 void ntp_notify_cmos_timer(void);
 
+#ifndef random_get_entropy
+/*
+ * The random_get_entropy() function is used by the /dev/random driver
+ * in order to extract entropy via the relative unpredictability of
+ * when an interrupt takes places versus a high speed, fine-grained
+ * timing source or cycle counter.  Since it will be occurred on every
+ * single interrupt, it must have a very low cost/overhead.
+ *
+ * By default we use get_cycles() for this purpose, but individual
+ * architectures may override this in their asm/timex.h header file.
+ */
+static inline cycles_t random_get_entropy(void)
+{
+	return get_cycles();
+}
+#endif
+
 /* The clock frequency of the i8253/i8254 PIT */
 #define PIT_TICK_RATE 1193182ul
 
