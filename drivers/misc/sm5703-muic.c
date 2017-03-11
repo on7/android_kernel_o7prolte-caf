@@ -240,7 +240,9 @@ struct sm5703_muic_usbsw {
 };
 
 static struct sm5703_muic_usbsw *local_usbsw;
-
+#if defined(CONFIG_SEC_O7_PROJECT)
+static struct regulator *fullup;
+#endif
 static int sm5703_muic_attach_dev(struct sm5703_muic_usbsw *usbsw);
 static int sm5703_muic_detach_dev(struct sm5703_muic_usbsw *usbsw);
 
@@ -1007,6 +1009,20 @@ static int sm5703_muic_attach_dev(struct sm5703_muic_usbsw *usbsw)
 #if defined(CONFIG_VIDEO_MHL_V2)
 	/* u8 mhl_ret = 0; */
 #endif
+#if defined(CONFIG_SEC_O7_PROJECT)
+	if(fullup == NULL){
+		fullup = regulator_get(NULL,"BAT_ID_1.8V");
+		if(IS_ERR(fullup))
+		{
+			pr_err("%s:regulator_get failed for BAT_ID_1.8V\n",__func__);
+			return 0;
+		}
+	}
+	ret = regulator_enable(fullup);
+	if(ret)
+		pr_err("%s:BAT_ID_1.8V enable failed (%d)\n",__func__,ret);
+	pr_info("%s Enable SM5703 LDO3 for batt_id fullup\n",__func__);
+#endif
 	val1 = sm5703_muic_read_reg(client, REG_DEVICE_TYPE1);
 	if (val1 < 0) {
 		dev_err(&client->dev, "%s: err %d\n", __func__, val1);
@@ -1336,6 +1352,21 @@ static int sm5703_muic_detach_dev(struct sm5703_muic_usbsw *usbsw)
 	pr_info("%s\n", __func__);
 	pr_info("dev1: 0x%x,dev2: 0x%x,chg_typ: 0x%x,vbus %d,ADC: 0x%x\n",
 			usbsw->dev1, usbsw->dev2, usbsw->dev3, usbsw->vbus, usbsw->adc);
+
+#if defined(CONFIG_SEC_O7_PROJECT)
+	if(fullup == NULL){
+		fullup = regulator_get(NULL,"BAT_ID_1.8V");
+		if(IS_ERR(fullup))
+		{
+			pr_err("%s:regulator_get failed for BAT_ID_1.8V\n",__func__);
+			return 0;
+		}
+	}
+	ret = regulator_disable(fullup);
+	if(ret)
+		pr_err("%s:BAT_ID_1.8V disable failed (%d)\n",__func__,ret);
+	pr_info("%s Disable SM5703 LDO3\n",__func__);
+#endif
 
 #if !defined(CONFIG_USBID_STANDARD_VER_01)
 	switch (usbsw->adc) {

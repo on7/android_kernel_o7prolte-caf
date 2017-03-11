@@ -152,6 +152,18 @@ fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH_A8) += abov/abov_tk_a8.fw
 
 fw-shipped-$(CONFIG_TOUCHSCREEN_FTS) += tsp_stm/stm.fw tsp_stm/stm_de.fw
 
+fw-shipped-$(CONFIG_TOUCHSCREEN_ZT7548_TS)	+= tsp_zinitix/zt7548_gtes.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_ZT7538_TS)	+= tsp_zinitix/zt7538_o7.fw
+
+ifdef CONFIG_SEC_O7_PROJECT
+fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_o7.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_o7_cmcs.bin
+endif
+ifdef CONFIG_SEC_J3_PROJECT
+fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_j3.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_j3_cmcs.bin
+endif
+
 fw-shipped-$(CONFIG_INPUT_WACOM) += epen/W9007A_0450.bin
 fw-shipped-$(CONFIG_INPUT_WACOM) += epen/W9007A_C430.bin
 fw-shipped-$(CONFIG_INPUT_WACOM) += epen/W9007A_C483.bin

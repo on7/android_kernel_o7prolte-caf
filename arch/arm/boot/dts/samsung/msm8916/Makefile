@@ -137,6 +137,29 @@ ifeq ($(CONFIG_SEC_SIGNUM_PROJECT),y)
 	dtb-y += msm8916-sec-signumlte-eur-r00.dtb
 endif
 
+ifeq ($(CONFIG_SEC_O7_PROJECT),y)
+	ifeq ($(CONFIG_MACH_O7_CHN_OPEN),y)
+		dtb-y += msm8916-sec-o7lte-chn-r00.dtb
+		dtb-y += msm8916-sec-o7lte-chn-r01.dtb
+		dtb-y += msm8916-sec-o7lte-chn-r02.dtb
+		dtb-y += msm8916-sec-o7lte-chn-r03.dtb
+	else ifeq ($(CONFIG_MACH_O7_SWA_OPEN),y)
+		dtb-y += msm8916-sec-o7lte-swa-r01.dtb
+		dtb-y += msm8916-sec-o7lte-swa-r02.dtb
+		dtb-y += msm8916-sec-o7lte-swa-r03.dtb
+	endif
+endif
+
+ifeq ($(CONFIG_SEC_J3_PROJECT),y)
+	ifeq ($(CONFIG_MACH_J3LTE_CHN_CTC),y)
+		dtb-y += msm8916-sec-j3lte-chnctc-r00.dtb
+		dtb-y += msm8916-sec-j3lte-chnctc-r02.dtb
+	else ifeq ($(CONFIG_MACH_J3LTE_USA_SPR),y)
+		dtb-y += msm8916-sec-j3lte-spr-r00.dtb
+		dtb-y += msm8916-sec-j3lte-spr-r01.dtb
+	endif
+endif
+
 ifeq ($(CONFIG_SEC_E5_PROJECT),y)
 	ifeq ($(CONFIG_MACH_E5_EUR_OPEN),y)
 		dtb-y += msm8916-sec-e5-r00.dtb

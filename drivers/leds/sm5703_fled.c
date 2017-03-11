@@ -213,7 +213,11 @@ static int sm5703_fled_init(struct sm_fled_info *fled_info)
 			SM5703_IMLED_MASK, info->pdata->fled_movie_current);
 
 	sm5703_reg_write(info->i2c_client, SM5703_FLEDCNTL1,0x1C);//ENABSTMR:Enable | ABSTMR:1.6sec | FLEDEN:Disable
+#if defined(CONFIG_SEC_O7_PROJECT) || defined(CONFIG_MACH_J3LTE_USA_SPR)
+	sm5703_reg_write(info->i2c_client, SM5703_FLEDCNTL2,0x84);//nENSAFET:Disable | SAFET:400us | nONESHOT:Enable | ONETIMER:500ms
+#else
 	sm5703_reg_write(info->i2c_client, SM5703_FLEDCNTL2,0x94);//nENSAFET:Disable | SAFET:400us | nONESHOT:Disable | ONETIMER:500ms
+#endif
 
 	mutex_unlock(&info->led_lock);
 	return 0;
