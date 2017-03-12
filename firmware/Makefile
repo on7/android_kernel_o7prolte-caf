@@ -140,15 +140,19 @@ fw-shipped-$(CONFIG_YAM) += yam/1200.bin yam/9600.bin
 fw-shipped-$(CONFIG_TOUCHSCREEN_MMS300) += tsp_melfas/mms345l_e5.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_MMS300_A) += tsp_melfas/mms345l_a5.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_MELFAS_MMS449) += tsp_melfas/mms449_k5.fw tsp_melfas/mms449_a8.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_MELFAS_MMS438) += tsp_melfas/mms438_xcover3.fw
 fw-shipped-$(CONFIG_KEYBOARD_TC360_TKEY) += tkey/tc360_e5.fw tkey/tc360_e7.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_ATMEL_MXT1664T) += tsp_atmel/mxtt_klimt.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_ATMEL_MXT1664T) += tsp_atmel/mxtt_gt510lte.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_ATMEL_MXT1664T) += tsp_atmel/mxtt_gt5note10.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_ATMEL_MXT1188S) += tsp_atmel/mXT1188S.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_ATMEL_MXT1188S) += tsp_atmel/mXT1664S.fw
 fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH) += tkey/abov_tk_k5.fw
 fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH_A3) += abov/abov_tk_a3.fw
 fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH_A5) += abov/abov_tk_a5.fw
 fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH_A8) += abov/abov_tk_a8.fw
+fw-shipped-$(CONFIG_KEYBOARD_ABOV_TOUCH_NA7) += abov/abov_tk_na7.fw
+fw-shipped-$(CONFIG_KEYBOARD_TC360_TKEY_J3) += tkey/tc360_j3.fw
 
 fw-shipped-$(CONFIG_TOUCHSCREEN_FTS) += tsp_stm/stm.fw tsp_stm/stm_de.fw
 
@@ -200,12 +204,12 @@ quiet_cmd_fwbin = MK_FW   $@
 		  echo "    .section .rodata"				>>$@;\
 		  echo "    .p2align $${ASM_ALIGN}"			>>$@;\
 		  echo "_fw_$${FWSTR}_bin:"				>>$@;\
-		  echo "    .incbin \"$(2)\""				>>$@;\
+		  echo "    .incbin \"$(srctree)/$(2)\""				>>$@;\
 		  echo "_fw_end:"					>>$@;\
 		  echo "   .section .rodata.str,\"aMS\",$${PROGBITS},1"	>>$@;\
 		  echo "    .p2align $${ASM_ALIGN}"			>>$@;\
 		  echo "_fw_$${FWSTR}_name:"				>>$@;\
-		  echo "    .string \"$$FWNAME\""			>>$@;\
+		  echo "    .string \"$(srctree)/$$FWNAME\""			>>$@;\
 		  echo "    .section .builtin_fw,\"a\",$${PROGBITS}"	>>$@;\
 		  echo "    .p2align $${ASM_ALIGN}"			>>$@;\
 		  echo "    $${ASM_WORD} _fw_$${FWSTR}_name"		>>$@;\

@@ -151,6 +151,11 @@ enum {
 	HALL_IC_UNDEFINED,
 };
 
+enum BLIC_EVENT {
+	BLIC_INIT_EVENT,
+	BLIC_MAX_EVENT,
+};
+
 struct te_fitting_lut {
 	int te_duration;
 	int value;
@@ -446,6 +451,7 @@ struct panel_func {
 	void (*samsung_bl_ic_pwm_en)(int enable);
 	void (*samsung_bl_ic_i2c_ctrl)(int scaled_level);
 	void (*samsung_bl_ic_outdoor)(int enable);
+	void (*samsung_backlight_ic_power_on)(int enable);
 
 	/*LVDS*/
 	void (*samsung_ql_lvds_register_set)(struct mdss_dsi_ctrl_pdata *ctrl);
