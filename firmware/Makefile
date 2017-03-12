@@ -158,10 +158,11 @@ fw-shipped-$(CONFIG_TOUCHSCREEN_FTS) += tsp_stm/stm.fw tsp_stm/stm_de.fw
 
 fw-shipped-$(CONFIG_TOUCHSCREEN_ZT7548_TS)	+= tsp_zinitix/zt7548_gtes.fw
 fw-shipped-$(CONFIG_TOUCHSCREEN_ZT7538_TS)	+= tsp_zinitix/zt7538_o7.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) 	+= tsp_imagis/ist3038c_o7.fw
+fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC)	+= tsp_imagis/ist3038c_o7_cmcs.bin
 
 ifdef CONFIG_SEC_O7_PROJECT
-fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_o7.fw
-fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_o7_cmcs.bin
+
 endif
 ifdef CONFIG_SEC_J3_PROJECT
 fw-shipped-$(CONFIG_TOUCHSCREEN_IST30XXC) += tsp_imagis/ist3038c_j3.fw
@@ -204,12 +205,12 @@ quiet_cmd_fwbin = MK_FW   $@
 		  echo "    .section .rodata"				>>$@;\
 		  echo "    .p2align $${ASM_ALIGN}"			>>$@;\
 		  echo "_fw_$${FWSTR}_bin:"				>>$@;\
-		  echo "    .incbin \"$(srctree)/$(2)\""				>>$@;\
+		  echo "    .incbin \"$(2)\""				>>$@;\
 		  echo "_fw_end:"					>>$@;\
 		  echo "   .section .rodata.str,\"aMS\",$${PROGBITS},1"	>>$@;\
 		  echo "    .p2align $${ASM_ALIGN}"			>>$@;\
 		  echo "_fw_$${FWSTR}_name:"				>>$@;\
-		  echo "    .string \"$(srctree)/$$FWNAME\""			>>$@;\
+		  echo "    .string \"$$FWNAME\""			>>$@;\
 		  echo "    .section .builtin_fw,\"a\",$${PROGBITS}"	>>$@;\
 		  echo "    .p2align $${ASM_ALIGN}"			>>$@;\
 		  echo "    $${ASM_WORD} _fw_$${FWSTR}_name"		>>$@;\
