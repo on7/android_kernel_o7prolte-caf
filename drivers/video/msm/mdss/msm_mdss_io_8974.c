@@ -837,11 +837,18 @@ static int mdss_dsi_link_clk_set_rate(struct mdss_dsi_ctrl_pdata *ctrl_pdata)
 {
 	u32 esc_clk_rate = 19200000;
 	int rc = 0;
+	struct samsung_display_driver_data *vdd = NULL;
 
 	if (!ctrl_pdata) {
 		pr_err("%s: Invalid input data\n", __func__);
 		return -EINVAL;
 	}
+
+	vdd = check_valid_ctrl(ctrl_pdata);
+
+	if(vdd->dtsi_data[ctrl_pdata->ndx].samsung_esc_clk_128M)
+		esc_clk_rate = 12800000;
+
 
 	if (!ctrl_pdata->panel_data.panel_info.cont_splash_enabled) {
 		pr_debug("%s: Set clk rates: pclk=%d, byteclk=%d escclk=%d\n",

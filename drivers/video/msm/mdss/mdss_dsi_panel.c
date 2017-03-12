@@ -356,6 +356,9 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 			if (gpio_is_valid(ctrl_pdata->disp_en_gpio))
 				gpio_set_value((ctrl_pdata->disp_en_gpio), 1);
 
+		if (vdd->panel_func.samsung_backlight_ic_power_on)
+			vdd->panel_func.samsung_backlight_ic_power_on(1);
+
 			for (i = 0; i < pdata->panel_info.rst_seq_len; ++i) {
 				gpio_set_value((ctrl_pdata->rst_gpio),
 					pdata->panel_info.rst_seq[i]);
@@ -378,6 +381,11 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 					pr_debug("%s : bklt_en_gpio on\n", __func__);
 			}
 #endif
+		}
+		else if(!mdss_panel_attach_get(ctrl_pdata))
+		{
+			if (gpio_is_valid(ctrl_pdata->disp_en_gpio))
+				gpio_set_value((ctrl_pdata->disp_en_gpio), 0);
 		}
 		if (gpio_is_valid(ctrl_pdata->mode_gpio)) {
 			if (pinfo->mode_gpio_state == MODE_GPIO_HIGH)
@@ -409,6 +417,9 @@ int mdss_dsi_panel_reset(struct mdss_panel_data *pdata, int enable)
 
 		if(pinfo->mipi.power_off_delay)
 			udelay(pinfo->mipi.power_off_delay);
+
+		if (vdd->panel_func.samsung_backlight_ic_power_on)
+			vdd->panel_func.samsung_backlight_ic_power_on(0);
 
 		if (gpio_is_valid(ctrl_pdata->disp_en_gpio)) {
 			gpio_set_value((ctrl_pdata->disp_en_gpio), 0);
@@ -1876,6 +1887,8 @@ static int mdss_panel_parse_dt(struct device_node *np,
 				pr_err("TE-ESD not valid for video mode\n");
 		}
 	}
+	pinfo->mipi.force_clk_lane_hs = of_property_read_bool(np,
+		"qcom,mdss-dsi-force-clock-lane-hs");
 
 	rc = mdss_dsi_parse_panel_features(np, ctrl_pdata);
 	if (rc) {

@@ -580,10 +580,10 @@ int mdss_mdp_csc_setup(u32 block, u32 blk_idx, u32 csc_type)
 #if defined(CONFIG_FB_MSM_MDSS_SAMSUNG)
 	if (csc_type == MDSS_MDP_CSC_YUV2RGB && !csc_update) {
 		data = &mdp_csc_convert_wideband;
-		pr_info("will do mdp_csc_convert (wide band)\n");
+		pr_debug("will do mdp_csc_convert (wide band)\n");
 	} else {
 	data = &mdp_csc_convert[csc_type];
-		pr_info("will do mdp_csc_convert (narrow band)\n");
+		pr_debug("will do mdp_csc_convert (narrow band)\n");
 	}
 #else
 	data = &mdp_csc_convert[csc_type];
@@ -910,14 +910,8 @@ static int pp_vig_pipe_setup(struct mdss_mdp_pipe *pipe, u32 *op)
 			 * is a previously configured pipe need to re-configure
 			 * CSC matrix
 			 */
-#if defined(CONFIG_FB_MSM_MDSS_SAMSUNG)
-		if ((pipe->play_cnt == 0))
 			mdss_mdp_csc_setup(MDSS_MDP_BLOCK_SSPP, pipe->num,
-					   MDSS_MDP_CSC_YUV2RGB);
-#else
-			mdss_mdp_csc_setup(MDSS_MDP_BLOCK_SSPP, pipe->num,
-					   MDSS_MDP_CSC_YUV2RGB);
-#endif
+								MDSS_MDP_CSC_YUV2RGB);
 		}
 	}
 
@@ -1794,6 +1788,7 @@ static int pp_dspp_setup(u32 disp_num, struct mdss_mdp_mixer *mixer)
 			pp_sts->pgc_sts |= PP_STS_ENABLE;
 		pp_sts_set_split_bits(&pp_sts->pgc_sts, pgc_config->flags);
 	}
+
 opmode_config:
 	pp_dspp_opmode_config(ctl, dspp_num, pp_sts, mdata->mdp_rev, &opmode);
 
@@ -4692,6 +4687,7 @@ int mdss_mdp_ad_input(struct msm_fb_data_type *mfd,
 			mdss_fb_set_backlight(mfd, bl);
 			mutex_unlock(&mfd->bl_lock);
 			mutex_lock(&ad->lock);
+			mfd->calib_mode_bl = bl;
 		} else {
 			pr_warn("should be in calib mode\n");
 		}
@@ -5678,6 +5674,9 @@ int mdss_mdp_calib_mode(struct msm_fb_data_type *mfd,
 		return -EINVAL;
 	mutex_lock(&mdss_pp_mutex);
 	mfd->calib_mode = cfg->calib_mask;
+	mutex_lock(&mfd->bl_lock);
+	mfd->calib_mode_bl = mfd->bl_level;
+	mutex_unlock(&mfd->bl_lock);
 	mutex_unlock(&mdss_pp_mutex);
 	return 0;
 }

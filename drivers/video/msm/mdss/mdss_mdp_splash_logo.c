@@ -266,6 +266,17 @@ int mdss_mdp_splash_cleanup(struct msm_fb_data_type *mfd,
 
 	mdss_mdp_ctl_splash_finish(ctl, mdp5_data->handoff);
 
+#if defined(CONFIG_FB_MSM_MDSS_SAMSUNG) && defined(CONFIG_SEC_DEBUG)
+	if (!sec_debug_is_enabled()) {
+		if (mdp5_data->splash_mem_addr) {
+			/* Give back the reserved memory to the system */
+			memblock_free(mdp5_data->splash_mem_addr,
+						mdp5_data->splash_mem_size);
+			mdss_free_bootmem(mdp5_data->splash_mem_addr,
+						mdp5_data->splash_mem_size);
+		}
+	}
+#else
 	if (mdp5_data->splash_mem_addr) {
 		/* Give back the reserved memory to the system */
 		memblock_free(mdp5_data->splash_mem_addr,
@@ -273,6 +284,7 @@ int mdss_mdp_splash_cleanup(struct msm_fb_data_type *mfd,
 		mdss_free_bootmem(mdp5_data->splash_mem_addr,
 					mdp5_data->splash_mem_size);
 	}
+#endif
 
 	mdss_mdp_footswitch_ctrl_splash(0);
 end:
