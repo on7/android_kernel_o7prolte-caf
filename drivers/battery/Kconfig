@@ -445,6 +445,14 @@ config CHARGER_SM5703_SOFT_START_CHARGING
 	  Say Y here to enable support for SM5703 soft step charging
 	  You have to define CHARGER_SM5703
 
+config CHARGER_SM5703_DUALPATH
+	bool "SM5703 dual path"
+	default n
+	depends on CHARGER_SM5703
+	help
+	  Say Y here to enable support for SM5703 dual path setting for removal model in S/W
+	  You have to define CHARGER_SM5703
+
 config AFC_CHARGER_MODE
 	bool "afc charging support in sec battery driver"
 	default n

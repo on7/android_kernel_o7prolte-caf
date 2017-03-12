@@ -114,6 +114,13 @@ config SENSORS_CM3323_ESD_DEFENCE
 
 	  Say N here if you do not use ESD defence in cm3323.
 
+config SENSORS_STK3013
+	depends on I2C
+	tristate "STK3013 driver"
+	default n
+	help
+	  This option enables proximity sensor using STK3013 driver.
+
 config SENSORS_TCS3490
 	depends on I2C
 	tristate "TCS3490 driver"
@@ -134,7 +141,7 @@ config SENSORS_SX9500
 
 config SENSORS_SX9500_INIT_TOUCH_THRESHOLD
 	int "SX9500 Grip sensor threshold for init touch"
-	depends on SENSORS_SX9500
+	depends on I2C
 	default "3000"
 	help
 	  This value is the standard of init touch using
@@ -142,7 +149,7 @@ config SENSORS_SX9500_INIT_TOUCH_THRESHOLD
 
 config SENSORS_SX9500_NORMAL_TOUCH_THRESHOLD
 	int "SX9500 Grip sensor threshold for normal touch"
-	depends on SENSORS_SX9500
+	depends on I2C
 	default "17"
 	help
 	  This value is the standard of normal touch using
